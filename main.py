@@ -5,11 +5,12 @@ import pygame
 from constants import *
 from player import Player
 from asteroid import Asteroid
-
+import sys
 import pygame
 import random
 from asteroid import Asteroid
 from constants import *
+from shot import Shot
 
 
 class AsteroidField(pygame.sprite.Sprite):
@@ -65,17 +66,19 @@ def main():
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    shots = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     clock = pygame.time.Clock()
     dt = 0
     
+    Shot.containers = (shots, drawable, updatable)
     AsteroidField.containers = (updatable)
     Asteroid.containers = (asteroids, updatable, drawable)
     Player.containers = (updatable, drawable)
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    field =  AsteroidField()
+    field = AsteroidField()
     
 
     while(True):
@@ -84,6 +87,15 @@ def main():
                 return
 
         updatable.update(dt)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            player.shoot(player.position[0], player.position[1], player.rotation, shots)
+
+        for item in asteroids:
+            if item.collide_check(player):
+                print("Game over!")
+                sys.exit()
+
         screen.fill('black', rect=None, special_flags=0) 
         for item in drawable:
             item.draw(screen)
