@@ -99,6 +99,10 @@ def main():
             if item.collide_check(player):
                 print("Game over!")
                 sys.exit()
+            for item2 in shots:
+                if item.collide_check(item2):
+                    # print("hit")
+                    item.split()
 
         screen.fill('black', rect=None, special_flags=0) 
         for item in drawable:
