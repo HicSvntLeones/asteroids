@@ -72,6 +72,7 @@ def main():
     asteroids = pygame.sprite.Group()
     clock = pygame.time.Clock()
     dt = 0
+    cooldown = 0.3
     
     Shot.containers = (shots, drawable, updatable)
     AsteroidField.containers = (updatable)
@@ -87,9 +88,12 @@ def main():
                 return
 
         updatable.update(dt)
+        cooldown -= dt
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            player.shoot(player.position[0], player.position[1], player.rotation, shots)
+            if cooldown <= 0:
+                player.shoot(player.position[0], player.position[1], player.rotation, shots)
+                cooldown = 0.3
 
         for item in asteroids:
             if item.collide_check(player):
