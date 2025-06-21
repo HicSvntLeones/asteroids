@@ -5,6 +5,8 @@ import pygame
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
+        self.image = pygame.Surface((PLAYER_RADIUS * 2, PLAYER_RADIUS * 2), pygame.SRCALPHA)
+        self.rect = self.image.get_rect(center=self.position)
         self.rotation = 0
     
     def triangle(self):
